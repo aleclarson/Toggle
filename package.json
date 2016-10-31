@@ -1,0 +1,16 @@
+{
+  "name": "Toggle",
+  "version": "1.0.0",
+  "main": "js/Toggle",
+  "plugins": [
+    "lotus-coffee"
+  ],
+  "scripts": {
+    "build": "coffee-build -v 1.11.x -b -o js src",
+    "postinstall": "npm run build"
+  },
+  "dependencies": {
+    "Tappable": "aleclarson/Tappable#1.0.0",
+    "modx": "aleclarson/modx#1.0.0"
+  }
+}

@@ -7,8 +7,9 @@ Tappable = require "Tappable"
 type = Type "Toggle"
 
 type.defineOptions
-  value: Number.isRequired
-  maxValue: Number.isRequired
+  value: Number.withDefault 0
+  maxValue: Number.withDefault 1
+  modes: Array.or Object
 
 type.defineValues (options) ->
 
@@ -16,15 +17,34 @@ type.defineValues (options) ->
 
   maxValue: options.maxValue
 
+  modes: options.modes
+
   _tap: Tappable()
+
+type.initInstance ->
+
+  return if not modes = @modes
+
+  if not Array.isArray modes
+    @modes = modes = Object.keys(modes).map (key) ->
+      mode = modes[key]
+      mode.key = key
+      return mode
+
+  @maxValue = modes.length - 1
+  return
 
 type.defineBoundMethods
 
   _onToggle: ->
+
     if @value is @maxValue
     then @value = 0
     else @value += 1
-    @props.onToggle @value
+
+    if @modes
+    then @props.onToggle @mode
+    else @props.onToggle @value
 
 type.defineListeners ->
 
@@ -35,6 +55,10 @@ type.defineListeners ->
 
   if fn = @props.onResponderEnd
     @_tap.didEnd fn
+
+type.defineGetters
+
+  mode: -> @modes[@value]
 
 #
 # Rendering

@@ -1,11 +1,10 @@
 
 {Type, Style, Children} = require "modx"
-{Responder} = require "gesture"
 {View} = require "modx/views"
 
-objectify = require "objectify"
+emptyFunction = require "emptyFunction"
+parseOptions = require "parseOptions"
 Tappable = require "Tappable"
-Event = require "Event"
 
 type = Type "Toggle"
 
@@ -16,19 +15,14 @@ type.defineOptions
 
 type.defineValues (options) ->
 
-  tapConfig = objectify {keys: Responder.optionTypes, values: options}
-
   value: options.value
 
   maxValue: options.maxValue
 
   modes: options.modes
 
-  _tap: Tappable tapConfig
-
-type.addMixin Event.Mixin,
-
-  didToggle: null
+  _tap: Tappable do ->
+    parseOptions Tappable, options
 
 type.defineGetters
 
@@ -60,8 +54,8 @@ type.defineBoundMethods
     else @value += 1
 
     if @modes
-    then @__events.didToggle @mode, @value
-    else @__events.didToggle @value
+    then @props.onToggle @mode, @value
+    else @props.onToggle @value
 
 type.defineListeners ->
 
@@ -84,6 +78,7 @@ type.defineGetters
 type.defineProps
   style: Style
   children: Children
+  onToggle: Function.withDefault emptyFunction
 
 type.render ->
   return View

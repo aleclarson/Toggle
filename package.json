@@ -10,10 +10,9 @@
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "Event": "aleclarson/Event#2.0.1",
     "Tappable": "aleclarson/Tappable#1.0.0",
-    "gesture": "aleclarson/gesture#2.0.1",
+    "emptyFunction": "aleclarson/emptyFunction#1.0.0",
     "modx": "aleclarson/modx#1.0.0",
-    "objectify": "aleclarson/objectify#1.0.0"
+    "parseOptions": "aleclarson/parseOptions#1.0.0"
   }
 }

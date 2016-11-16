@@ -15,7 +15,7 @@ type.defineOptions
 
 type.defineValues (options) ->
 
-  value: options.value
+  _value: options.value
 
   maxValue: options.maxValue
 
@@ -45,21 +45,9 @@ type.initInstance ->
   @maxValue = modes.length - 1
   return
 
-type.defineBoundMethods
-
-  _onToggle: ->
-
-    if @value is @maxValue
-    then @value = 0
-    else @value += 1
-
-    if @modes
-    then @props.onToggle @mode, @value
-    else @props.onToggle @value
-
 type.defineListeners ->
 
-  @_tap.didTap @_onToggle
+  @_tap.didTap => @toggle()
 
   if fn = @props.onResponderGrant
     @_tap.didGrant fn
@@ -67,9 +55,34 @@ type.defineListeners ->
   if fn = @props.onResponderEnd
     @_tap.didEnd fn
 
-type.defineGetters
+type.definePrototype
 
-  mode: -> @modes[@value]
+  value:
+    get: -> @_value
+    set: (newValue) ->
+      return if newValue is @_value
+      @_value = newValue
+      @_notify()
+      return
+
+  mode:
+    get: -> @modes[@_value]
+
+type.defineMethods
+
+  toggle: ->
+
+    if @_value is @maxValue
+    then @_value = 0
+    else @_value += 1
+
+    @_notify()
+    return
+
+  _notify: ->
+    if @modes
+    then @props.onToggle @mode, @_value
+    else @props.onToggle @_value
 
 #
 # Rendering

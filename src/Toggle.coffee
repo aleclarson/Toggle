@@ -12,25 +12,17 @@ type.defineOptions
   value: Number.withDefault 0
   maxValue: Number.withDefault 1
   modes: Array.or Object
+  tap: Tappable
 
 type.defineValues (options) ->
+
+  _tap: options.tap
 
   _value: options.value
 
   maxValue: options.maxValue
 
   modes: options.modes
-
-  _tap: Tappable do ->
-    parseOptions Tappable, options
-
-type.defineGetters
-
-  didResponderGrant: -> @_tap.didResponderGrant
-
-  didResponderReject: -> @_tap.didResponderReject
-
-  didResponderEnd: -> @_tap.didResponderEnd
 
 type.initInstance ->
 
@@ -45,16 +37,6 @@ type.initInstance ->
   @maxValue = modes.length - 1
   return
 
-type.defineListeners ->
-
-  @_tap.didTap => @toggle()
-
-  if fn = @props.onResponderGrant
-    @_tap.didGrant fn
-
-  if fn = @props.onResponderEnd
-    @_tap.didEnd fn
-
 type.definePrototype
 
   value:
@@ -62,7 +44,7 @@ type.definePrototype
     set: (newValue) ->
       return if newValue is @_value
       @_value = newValue
-      @_notify()
+      @_onToggle()
       return
 
   mode:
@@ -72,14 +54,16 @@ type.defineMethods
 
   toggle: ->
 
-    if @_value is @maxValue
-    then @_value = 0
-    else @_value += 1
+    value = @_value
+    if value is @maxValue
+    then value = 0
+    else value += 1
 
-    @_notify()
-    return
+    @_value = value
+    @_onToggle()
+    return value
 
-  _notify: ->
+  _onToggle: ->
     if @modes
     then @props.onToggle @mode, @_value
     else @props.onToggle @_value
@@ -94,9 +78,10 @@ type.defineProps
   onToggle: Function.withDefault emptyFunction
 
 type.render ->
+  {touchHandlers} = @_tap if @_tap
   return View
     style: @props.style
     children: @props.children
-    mixins: [@_tap.touchHandlers]
+    mixins: [touchHandlers]
 
 module.exports = type.build()

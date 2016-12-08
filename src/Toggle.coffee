@@ -2,7 +2,9 @@
 {Type, Style, Children} = require "modx"
 {View} = require "modx/views"
 
-Tappable = require "Tappable"
+emptyFunction = require "emptyFunction"
+parseOptions = require "parseOptions"
+TapResponder = require "TapResponder"
 
 type = Type "Toggle"
 
@@ -10,16 +12,17 @@ type.defineOptions
   value: Number.withDefault 0
   maxValue: Number.withDefault 1
   modes: Array.or Object
+  tap: TapResponder
 
 type.defineValues (options) ->
 
-  value: options.value
+  _tap: options.tap
+
+  _value: options.value
 
   maxValue: options.maxValue
 
   modes: options.modes
-
-  _tap: Tappable()
 
 type.initInstance ->
 
@@ -34,31 +37,36 @@ type.initInstance ->
   @maxValue = modes.length - 1
   return
 
-type.defineBoundMethods
+type.definePrototype
+
+  value:
+    get: -> @_value
+    set: (newValue) ->
+      return if newValue is @_value
+      @_value = newValue
+      @_onToggle()
+      return
+
+  mode:
+    get: -> @modes[@_value]
+
+type.defineMethods
+
+  toggle: ->
+
+    value = @_value
+    if value is @maxValue
+    then value = 0
+    else value += 1
+
+    @_value = value
+    @_onToggle()
+    return value
 
   _onToggle: ->
-
-    if @value is @maxValue
-    then @value = 0
-    else @value += 1
-
     if @modes
-    then @props.onToggle @mode
-    else @props.onToggle @value
-
-type.defineListeners ->
-
-  @_tap.didTap @_onToggle
-
-  if fn = @props.onResponderGrant
-    @_tap.didGrant fn
-
-  if fn = @props.onResponderEnd
-    @_tap.didEnd fn
-
-type.defineGetters
-
-  mode: -> @modes[@value]
+    then @props.onToggle @mode, @_value
+    else @props.onToggle @_value
 
 #
 # Rendering
@@ -67,14 +75,13 @@ type.defineGetters
 type.defineProps
   style: Style
   children: Children
-  onToggle: Function.isRequired
-  onResponderGrant: Function
-  onResponderEnd: Function
+  onToggle: Function.withDefault emptyFunction
 
 type.render ->
+  {touchHandlers} = @_tap if @_tap
   return View
     style: @props.style
     children: @props.children
-    mixins: [@_tap.touchHandlers]
+    mixins: [touchHandlers]
 
 module.exports = type.build()

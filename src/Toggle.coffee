@@ -1,12 +1,13 @@
 
-{Type, Style, Children} = require "modx"
-{View} = require "modx/views"
+{Style, Children} = require "react-validators"
 
 emptyFunction = require "emptyFunction"
 parseOptions = require "parseOptions"
 TapResponder = require "TapResponder"
+ReactType = require "modx/lib/Type"
+View = require "modx/lib/View"
 
-type = Type "Toggle"
+type = ReactType "Toggle"
 
 type.defineOptions
   value: Number.withDefault 0

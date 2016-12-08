@@ -1,6 +1,6 @@
 {
   "name": "Toggle",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "js/Toggle",
   "plugins": [
     "lotus-coffee"
@@ -12,7 +12,8 @@
   "dependencies": {
     "TapResponder": "aleclarson/TapResponder#1.2.0",
     "emptyFunction": "aleclarson/emptyFunction#1.0.0",
-    "modx": "aleclarson/modx#2.0.1",
-    "parseOptions": "aleclarson/parseOptions#1.0.0"
+    "modx": "aleclarson/modx#2.1.0",
+    "parseOptions": "aleclarson/parseOptions#1.0.0",
+    "react-validators": "aleclarson/react-validators#1.0.1"
   }
 }

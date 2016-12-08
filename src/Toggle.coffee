@@ -4,7 +4,7 @@
 
 emptyFunction = require "emptyFunction"
 parseOptions = require "parseOptions"
-Tappable = require "Tappable"
+TapResponder = require "TapResponder"
 
 type = Type "Toggle"
 
@@ -12,7 +12,7 @@ type.defineOptions
   value: Number.withDefault 0
   maxValue: Number.withDefault 1
   modes: Array.or Object
-  tap: Tappable
+  tap: TapResponder
 
 type.defineValues (options) ->
 

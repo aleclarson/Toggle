@@ -1,6 +1,6 @@
 {
   "name": "Toggle",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "js/Toggle",
   "plugins": [
     "lotus-coffee"

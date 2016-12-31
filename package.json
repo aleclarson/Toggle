@@ -10,8 +10,8 @@
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "TapResponder": "aleclarson/TapResponder#1.2.0",
-    "modx": "aleclarson/modx#2.1.0",
+    "TapResponder": "aleclarson/TapResponder#1.2.3",
+    "modx": "aleclarson/modx#2.4.1",
     "react-validators": "aleclarson/react-validators#1.0.1"
   }
 }

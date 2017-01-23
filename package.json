@@ -1,0 +1,10 @@
+{
+  "name": "Toggle",
+  "version": "2.0.2",
+  "main": "js/Toggle",
+  "dependencies": {
+    "TapResponder": "aleclarson/TapResponder#1.2.3",
+    "modx": "aleclarson/modx#2.4.1",
+    "react-validators": "aleclarson/react-validators#1.0.1"
+  }
+}

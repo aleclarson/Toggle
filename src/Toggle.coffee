@@ -1,8 +1,6 @@
 
 {Style, Children} = require "react-validators"
 
-emptyFunction = require "emptyFunction"
-parseOptions = require "parseOptions"
 TapResponder = require "TapResponder"
 ReactType = require "modx/lib/Type"
 View = require "modx/lib/View"
@@ -65,9 +63,11 @@ type.defineMethods
     return value
 
   _onToggle: ->
-    if @modes
-    then @props.onToggle @mode, @_value
-    else @props.onToggle @_value
+    if onToggle = @props.onToggle
+      if @modes
+      then onToggle @mode, @_value
+      else onToggle @_value
+    return
 
 #
 # Rendering
@@ -76,7 +76,7 @@ type.defineMethods
 type.defineProps
   style: Style
   children: Children
-  onToggle: Function.withDefault emptyFunction
+  onToggle: Function
 
 type.render ->
   {touchHandlers} = @_tap if @_tap

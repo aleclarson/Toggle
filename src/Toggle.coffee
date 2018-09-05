@@ -7,11 +7,17 @@ View = require "modx/lib/View"
 
 type = ReactType "Toggle"
 
-type.defineOptions
-  value: Number.withDefault 0
-  maxValue: Number.withDefault 1
-  modes: Array.or Object
-  tap: TapResponder
+type.defineArgs ->
+
+  types:
+    value: Number
+    maxValue: Number
+    modes: Array.or Object
+    tap: TapResponder
+
+  defaults:
+    value: 0
+    maxValue: 1
 
 type.defineValues (options) ->
 
